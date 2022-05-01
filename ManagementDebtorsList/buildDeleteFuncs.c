@@ -98,7 +98,7 @@ void fromFileToList(FILE* file_ptr, Debtor** head, int* countLines)
 			else
 			{
 				length = strlen(token);
-				temp->LastName = (char*)malloc(length + 1);
+				temp->LastName = (char*)malloc((length + 1));
 				strcpy(temp->LastName, token);
 			}
 		}
@@ -259,9 +259,9 @@ void buildNodeAndListQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* curre
 {
 	Debtor* temp;
 	temp = (Debtor*)malloc(sizeof(Debtor));
-	temp->FirstName = (char*)malloc(sizeof(strlen(current->FirstName)) + 1);
+	temp->FirstName = (char*)malloc(strlen(current->FirstName)+1);
 	strcpy(temp->FirstName, current->FirstName);
-	temp->LastName = (char*)malloc(sizeof(strlen(current->LastName)) + 1);
+	temp->LastName = (char*)malloc(strlen(current->LastName) + 1);
 	strcpy(temp->LastName, current->LastName);
 	strcpy(temp->ID, current->ID);
 	strcpy(temp->TelphonNumber, current->TelphonNumber);

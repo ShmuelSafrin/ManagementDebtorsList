@@ -110,7 +110,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDebtors with such a name were not found");
+								printf("\nDebtors with such a first name were not found");
 								flag = 0;
 							}
 						}
@@ -124,7 +124,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with a different name(from the name you gave) were not found.");
+								printf("\nDetors with a different first name(from the first name you gave) were not found.");
 								flag = 0;
 							}
 						}
@@ -138,7 +138,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with a different name(from the name you gave) were not found.");
+								printf("\nDetors with a smaller first name(from the first name you gave) were not found.");
 								flag = 0;
 							}
 						}
@@ -152,7 +152,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with a different name(from the name you gave) were not found.");
+								printf("\nDetors with a bigger first name(from the first name you gave) were not found.");
 								flag = 0;
 							}
 						}
@@ -166,7 +166,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with an equal name or a smaller name(from the name you gave) were not found.");
+								printf("\nDetors with an equal first name or a smaller one(from the first name you gave) were not found.");
 								flag = 0;
 							}
 						}
@@ -180,7 +180,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with an equal name or a bigger name(from the name you gave) were not found.");
+								printf("\nDetors with an equal first name or a bigger one(from the first name you gave) were not found.");
 								flag = 0;
 							}
 						}
@@ -199,7 +199,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDebtors with such a name were not found");
+								printf("\nDebtors with such a last name were not found");
 								flag = 0;
 							}
 						}
@@ -213,7 +213,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with a different name(from the name you gave) were not found.");
+								printf("\nDetors with a different last name(from the last name you gave) were not found.");
 								flag = 0;
 							}
 						}
@@ -227,7 +227,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with a different name(from the name you gave) were not found.");
+								printf("\nDetors with a smaller last name(from the last name you gave) were not found.");
 								flag = 0;
 							}
 						}
@@ -241,7 +241,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with a different name(from the name you gave) were not found.");
+								printf("\nDetors with a bigger last name(from the last name you gave) were not found.");
 								flag = 0;
 							}
 						}
@@ -255,7 +255,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with an equal name or a smaller name(from the name you gave) were not found.");
+								printf("\nDetors with an equal last name or a smaller one(from the last name you gave) were not found.");
 								flag = 0;
 							}
 						}
@@ -269,7 +269,7 @@ void queries(Debtor* head)
 							}
 							if (headQuery == NULL)
 							{
-								printf("\nDetors with an equal name or a bigger name(from the name you gave) were not found.");
+								printf("\nDetors with an equal last name or a bigger one(from the last name you gave) were not found.");
 								flag = 0;
 							}
 						}
