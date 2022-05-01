@@ -1,4 +1,3 @@
-#include "MainHeader.h"
 
 /*When we try to open the file unsuccessfully
 Then we notify to user and suggest him how

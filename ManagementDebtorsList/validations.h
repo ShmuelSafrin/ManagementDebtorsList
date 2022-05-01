@@ -1,3 +1,13 @@
+typedef struct Debtor
+{
+	char* FirstName;
+	char* LastName;
+	char ID[10];//should be exactly 9 chars. Of digits only.
+	char TelphonNumber[11];//should be exactly 10 chars.Digits only, And start with digit 0
+	float TotalDebt;
+	char FirstDebtsDate[11];
+	struct DetorList* next;
+}Debtor;
 
 
 /*This function is for the fields of the first name and the last name

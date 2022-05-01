@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
-
 #include "MainHeader.h"
+char FileName[] = "DebtorsList.csv";
+
 
 int main()
 {

@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "MainHeader.h"
 
 void QueriesSetPrint(FILE* fptr, Debtor* head, int* countLines)
