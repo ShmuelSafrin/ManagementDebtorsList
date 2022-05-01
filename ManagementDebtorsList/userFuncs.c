@@ -37,7 +37,7 @@ void QueriesSetPrint(FILE* fptr, Debtor* head, int* countLines)
 		"\n*Note: spell the fields names(In the query), exactly as"
 		"\nthe fields are spelled in the table as shown below"
 		"\n------------------------------------------------------------"
-		"\n| first name | last name | id | phone number | debt | date  |"
+		"\n| first name | last name | id | phone number | debt | date |"
 		"\n------------------------------------------------------------"
 		"\n*Note: You must put a space between words in a query"
 		"\n*Note: in all fielde you can select one of these options to the query: \"=\" , \"!=\" , \"<\" , \">\" , \"<=\" , \">=\""
