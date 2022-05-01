@@ -21,7 +21,7 @@ int main()
 	QueriesSetPrint(file_ptr,head,&countLines);
 	freeAllDebtors(head);
 	fclose(file_ptr);
-	printf("\nBye bye. Thank you for using my app...%c%c\n", 1, 1);
+	printf("\nBye bye. Thank you for using my app...%c%c%c\n",1,1,1);
 	printf("(The program created by Shmuel Safrin)\n\n");
 	return 0;
 }
