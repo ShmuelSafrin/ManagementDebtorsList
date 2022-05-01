@@ -1,4 +1,8 @@
-
+/*print the sorted debtors link list.
+The print will be as follow,
+for each debtor one line with his private details,
+his totalTebt,and his earliest date of his debts.*/
+void print(Debtor*, int);
 
 /*The function presents the user 3 options to  do, either query
 or insert a new line into the file or print the updated sorted list

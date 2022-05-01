@@ -4,12 +4,6 @@ Then we notify to user and suggest him how
 solve the problem then we exit the program*/
 void Error_Msg(char* msg);
 
-/*print the sorted debtors link list.
-The print will be as follow,
-for each debtor one line with his private details,
-his totalTebt,and his earliest date of his debts.*/
-void print(Debtor*, int);
-
 /*The order of the print lines will be by ascending order
 i.e. the debtor with the smallest tebt will be printed first
 and the debtor with the biggest debt will be printed last*/

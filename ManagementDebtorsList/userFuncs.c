@@ -1,6 +1,33 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "MainHeader.h"
 
+void print(Debtor* head, int flag)
+{
+	if (!flag)
+		printf("\nSummary debtors debts of the file. Sorted in ascending order by debt(Anyone with a credit balance is not shown)\n");
+	else
+		printf("\nDebtors that match your query\n");
+	printf("----------------------------------------------------------------------------------------------------\n");
+	printf("|First Name:\t\Last Name:\t Id:\t\t Phone Number:\t Total Debt:   Earliest Date Debt: |\n");
+	printf("----------------------------------------------------------------------------------------------------\n");
+
+	while (head != NULL)
+	{
+		if (head->TotalDebt < 0 && !flag)
+		{
+			head = head->next;
+			continue;
+		}
+		else
+		{
+			printf("|%-15s %-15s %-15s %-15s %-15.2f %-15s   |\n", head->FirstName, head->LastName,
+				head->ID, head->TelphonNumber, head->TotalDebt, head->FirstDebtsDate);
+			printf("----------------------------------------------------------------------------------------------------\n");
+			head = head->next;
+		}
+	}
+}
+
 void QueriesSetPrint(FILE* fptr, Debtor* head, int* countLines)
 {
 	char temp[8], ch; //ch for case that user didn't enter select/set/print/quit. So we will use getchar(), to clean the rest line

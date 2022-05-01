@@ -6,33 +6,6 @@ void Error_Msg(char* msg)
 	printf("%s\n", msg);
 	exit(1);
 }
-
-void print(Debtor* head, int flag)
-{
-	if (!flag)
-		printf("\nSummary debtors debts of the file. Sorted in ascending order by debt(Anyone with a credit balance is not shown)\n");
-	else
-		printf("\nDebtors that match your query\n");
-	printf("----------------------------------------------------------------------------------------------------\n");
-	printf("|First Name:\t\Last Name:\t Id:\t\t Phone Number:\t Total Debt:   Earliest Date Debt: |\n");
-	printf("----------------------------------------------------------------------------------------------------\n");
-
-	while (head != NULL)
-	{
-		if (head->TotalDebt < 0 && !flag)
-		{
-			head = head->next;
-			continue;
-		}
-		else
-		{
-			printf("|%-15s %-15s %-15s %-15s %-15.2f %-15s   |\n", head->FirstName, head->LastName,
-				head->ID, head->TelphonNumber, head->TotalDebt, head->FirstDebtsDate);
-			printf("----------------------------------------------------------------------------------------------------\n");
-			head = head->next;
-		}
-	}
-}
 /* sorts the linked list by changing next pointers (not data) */
 void MergeSort(Debtor** headRef)
 {
