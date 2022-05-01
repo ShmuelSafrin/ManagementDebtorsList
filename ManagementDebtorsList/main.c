@@ -15,7 +15,7 @@ int main()
 	if(file_ptr == NULL)
 		//If Debtors == NULL the program will notify and will exit
 		Error_Msg("File not found");
-	fromFileToList(file_ptr,&head,&countLines);
+	buildNodeFile(file_ptr,&head,&countLines);
 	MergeSort(&head);
 	print(head,0);
 	QueriesSetPrint(file_ptr,head,&countLines);

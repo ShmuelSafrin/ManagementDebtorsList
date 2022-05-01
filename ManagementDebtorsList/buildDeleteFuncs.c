@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "MainHeader.h"
 
-void fromFileToList(FILE* file_ptr, Debtor** head, int* countLines)
+void buildNodeFile(FILE* file_ptr, Debtor** head, int* countLines)
 {
 	int flag, length;
 	char line[MAX_LINE];
@@ -191,11 +191,11 @@ void fromFileToList(FILE* file_ptr, Debtor** head, int* countLines)
 		//---------------------------------------------------
 		/*Now we linking the new Detor to the link list*/
 		//---------------------------------------------------
-		addFileNodeToList(head, temp, countLines);
+		addNodeFileToList(head, temp, countLines);
 	}
 }
 
-void addFileNodeToList(Debtor** head, Debtor* node, int* lineNumber)
+void addNodeFileToList(Debtor** head, Debtor* node, int* lineNumber)
 {
 	Debtor* current;
 	if (*head == NULL)//If it's the first DetorList
@@ -255,7 +255,7 @@ void addFileNodeToList(Debtor** head, Debtor* node, int* lineNumber)
 	}
 }
 
-void buildNodeAndListQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* current)
+void buildNodeQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* current)
 {
 	Debtor* temp;
 	temp = (Debtor*)malloc(sizeof(Debtor));
@@ -267,10 +267,10 @@ void buildNodeAndListQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* curre
 	strcpy(temp->TelphonNumber, current->TelphonNumber);
 	temp->TotalDebt = current->TotalDebt;
 	strcpy(temp->FirstDebtsDate, current->FirstDebtsDate);
-	buildListQuery(headQuery, tailQuery, temp);
+	addNodeQueryToList(headQuery, tailQuery, temp);
 }
 
-void buildListQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* node)
+void addNodeQueryToList(Debtor** headQuery, Debtor** tailQuery, Debtor* node)
 {
 	//DebtorList* current;
 	if (*headQuery == NULL)//If it's the first DetorList
@@ -288,7 +288,7 @@ void buildListQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* node)
 	}
 }
 
-void setUserDebtorToList(FILE* fptr, Debtor** head, int* countLines)
+void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 {
 	int length, flag;
 	char line[MAX_LINE];
