@@ -43,7 +43,7 @@ void QueriesSetPrint(FILE* fptr, Debtor* head, int* countLines)
 		"\n*Note: in all fielde you can select one of these options to the query: \"=\" , \"!=\" , \"<\" , \">\" , \"<=\" , \">=\""
 		"\n*Note For set, type in this form and sequence: \"set firstName,LastName,Id,phoneNumber,det,date\""
 		"\ni.e set then space.Then type the debtor's details in sequence (without spaces) with a comma between each item(the line set should contain exatly 5 commas)."
-		"\n*Note For a new debt you type the numbre as positive and for a debt payment you type the number as negative"
+		"\n*Note For a new debt you type the numbrer as positive and for a debt payment you type the number as negative"
 		"\nA query's example: select date >= 05/05/2005  (*Note: the format data is _ _/_ _/_ _ _ _)"
 		"\nA set's example: set Moshe,Choen,123456789,0544123456,500,03/04/2022\n\n-->");
 
