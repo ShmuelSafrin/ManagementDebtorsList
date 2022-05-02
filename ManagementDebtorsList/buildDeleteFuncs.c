@@ -313,12 +313,12 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 	}
 	else if (count > 5)
 	{
-		printf("(Error, Too many arguments.\nthe program didn't get the line\n");
+		printf("(Error, Too many fields.\nthe program didn't get the line\n");
 		goto End;
 	}
 	else if (count < 5)
 	{
-		printf("(Error, Too few arguments.\nthe program didn't get the line.\n(Should be exactly 5 commas -->(like this:,,,,,)\n");
+		printf("(Error, Too few fields.\nthe program didn't get the line.\n(Should be exactly 5 commas. Between each 2 fields one comma --> (like this:,,,,,)\n");
 		goto End;
 	}
 	temp = (Debtor*)malloc(sizeof(Debtor));
