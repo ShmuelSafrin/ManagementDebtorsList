@@ -134,7 +134,7 @@ int checkEarlierDate(char* str1, char* str2)
 	return strcmp(temp1, temp2);;
 }
 
-int checkUnnecessaryWordsInputAtEnd()
+int checkUnnecessaryInputAtQueryEnd()
 {
 	char end[20];
 	fgets(end, 20, stdin);
@@ -151,7 +151,7 @@ int checkUnnecessaryWordsInputAtEnd()
 	}
 	return 1;
 }
-char* checkEndSet(char* check)
+char* checkUnnecessaryInputAtSetEnd(char* check)
 {
 	int i;
 	char Return[11]; //= (char*)malloc(11);
@@ -174,4 +174,17 @@ char* checkEndSet(char* check)
 	}
 	return Return;
 }
-
+char* stringToLower(char *word)
+{
+	int i = 0;
+	char letter;
+	char lowerWord[20];
+	while(word[i])
+	{
+		letter = tolower(word[i]);
+		lowerWord[i] = letter;
+		i++;
+	}
+	lowerWord[i] = '\0';
+	return lowerWord;
+}

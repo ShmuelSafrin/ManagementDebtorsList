@@ -58,10 +58,16 @@ in the user input if thre's it notifies error and does not accept the query
 or if the user enter print or quit with unnecessary words after
 if there are only spaces or tabs.
 The program goes on to present the user's request.*/
-int checkUnnecessaryWordsInputAtEnd();
+int checkUnnecessaryInputAtQueryEnd();
 
 /*Checks that there are no unnecessary words
 if thre's it notifies error and does not accept the user line
 if there are only spaces or tabs then it deletes them
 and gets the user line set.*/
-char* checkEndSet(char*);
+char* checkUnnecessaryInputAtSetEnd(char*);
+
+/*The function gets a word with whether capital letters or small letters.
+Then convertes the capital letters to a small one
+and add it to the a diffrent string.
+Then returns the containig only small letters string*/
+char* stringToLower(char* word);

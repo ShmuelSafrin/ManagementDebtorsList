@@ -257,6 +257,8 @@ void addNodeFileToList(Debtor** head, Debtor* node, int* lineNumber)
 
 void buildNodeQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* current)
 {
+	(*current->FirstName) = toupper(*current->FirstName);
+	(*current->LastName) = toupper(*current->LastName);
 	Debtor* temp;
 	temp = (Debtor*)malloc(sizeof(Debtor));
 	temp->FirstName = (char*)malloc(strlen(current->FirstName)+1);
@@ -467,7 +469,7 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 	{
 		char check[50];
 		strcpy(check, token);
-		char* copy = checkEndSet(check);
+		char* copy = checkUnnecessaryInputAtSetEnd(check);
 		if (!strcmp(copy, "Error"))
 			goto End;
 		strcpy(temp->FirstDebtsDate, copy);
