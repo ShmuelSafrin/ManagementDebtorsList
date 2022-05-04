@@ -37,7 +37,6 @@ void buildNodeFile(FILE* file_ptr, Debtor** head, int* countLines)
 		temp = (Debtor*)malloc(sizeof(Debtor));
 		if (temp == NULL)//check if the allocation failed
 		{
-			free(temp);
 			Error_Msg("Memmory allocation failed!!. (Try closing other programs that are currently running.\nIf you are still having a problem try restarting your computer.)\n");
 		}
 		strcpy(copyLine, line);
@@ -265,6 +264,10 @@ void buildNodeQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* current)
 	(*current->LastName) = toupper(*current->LastName);
 	Debtor* temp;
 	temp = (Debtor*)malloc(sizeof(Debtor));
+	if (temp == NULL)//check if the allocation failed
+	{
+		Error_Msg("Memmory allocation failed!!. (Try closing other programs that are currently running.\nIf you are still having a problem try restarting your computer.)\n");
+	}
 	temp->FirstName = (char*)malloc(strlen(current->FirstName)+1);
 	strcpy(temp->FirstName, current->FirstName);
 	temp->LastName = (char*)malloc(strlen(current->LastName) + 1);
@@ -298,7 +301,6 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 {
 	int flag = 1,fromDate = 0;
 	char delimiters[4] = " \t=";
-	char checkEnd[MAX_LINE];
 	char copy[MAX_LINE];
 	char line[MAX_LINE];
 	char* token = NULL;

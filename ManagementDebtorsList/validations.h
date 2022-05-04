@@ -60,12 +60,6 @@ if there are only spaces or tabs.
 The program goes on to present the user's request.*/
 int checkUnnecessaryInputAtQueryEnd();
 
-/*Checks that there are no unnecessary words
-if thre's it notifies error and does not accept the user line
-if there are only spaces or tabs then it deletes them
-and gets the user line set.*/
-char* checkUnnecessaryInputAtSetEnd(char*);
-
 /*The function for insenstive words.
 The function gets a word with whether capital letters or small letters.
 Then convertes the capital letters to a small one
