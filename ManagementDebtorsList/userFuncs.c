@@ -78,217 +78,280 @@ void QueriesSetPrint(FILE* fptr, Debtor* head, int* countLines)
 
 void queries(Debtor* head)
 {
-	int flag = 1;
-	char temp[7];
+	int flag = 1,i,len;
+	char temp[MIDDLE_SIZE];
 	char field[20];
-	char operator[20];
+	char operator[MIDDLE_SIZE];
 	char word[20];
 	Debtor* headQuery = NULL, * tailQuery = NULL, * current = head;
 	scanf("%s", &field);
 	if (!strcmp(field, "first") || !strcmp(field, "last"))
 	{
 		scanf("%s", &temp);
+		len = strlen(temp);
 		if (!strcmp(temp, "name"))
+			goto operator;
+		else if (!strcmp(temp, "name=") || !strcmp(temp, "name!=") || !strcmp(temp, "name<") || !strcmp(temp, "name>") || !strcmp(temp, "name<=") || !strcmp(temp, "name>="))
 		{
-			scanf("%s", &operator);
-			if (!strcmp(operator, "=") || !strcmp(operator, "!=") || !strcmp(operator, "<") || !strcmp(operator, ">") || !strcmp(operator, "<=") || !strcmp(operator, ">="))
+			operator[0] = temp[4];
+			if(temp[5] == '\0')
+				operator[1] = '\0';
+			else
 			{
-				scanf("%s", &word);
-				if (checkAlphabet(word))
+				operator[1] = temp[5];
+				operator[2] = '\0';
+			}
+			goto Word;
+		}
+		else if (!strncmp(temp, "name=", 5) || !strncmp(temp, "name!=", 5) || !strncmp(temp, "name<", 5) || !strncmp(temp, "name>", 5) || !strncmp(temp, "name<=", 5) || !strncmp(temp, "name>=", 5))
+		{
+			operator[0] = temp[4];
+			if (temp[5] == '=')
+			{
+				operator[1] = temp[5];
+				operator[2] = '\0';
+				i = 6;
+				while (temp[i] != '\0')
 				{
-					if (!checkUnnecessaryInputAtQueryEnd())
-						goto Return;
-					strcpy(word,stringToLower(word));
-					/*Build linked list for first name query*/
-					if (!strcmp(field, "first"))
-					{/*Check the operator query*/
-						if (!strcmp(operator, "="))
-						{
-							while (current != NULL)
-							{
-								if (!strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word))/*if 0. i.e they are equal*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDebtors with such a first name were not found");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, "!="))
-						{
-							while (current != NULL)
-							{
-								if (strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word))/*if not 0. i.e they are not equal*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with a different first name(from the first name you gave) were not found.");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, "<"))
-						{
-							while (current != NULL)
-							{
-								if (!strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) == -1)/*if return -1. So current->FirstName < word*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with a smaller first name(from the first name you gave) were not found.");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, ">"))
-						{
-							while (current != NULL)
-							{
-								if (strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) == 1)/*if return 1. So current->FirstName > word*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with a bigger first name(from the first name you gave) were not found.");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, "<="))
-						{
-							while (current != NULL)
-							{
-								if (!strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) || strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) == -1)/*if return 0 So current->FirstName = word. And if return -1. So current->FirstName < word*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with an equal first name or a smaller one(from the first name you gave) were not found.");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, ">="))
-						{
-							while (current != NULL)
-							{
-								if (!strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) || strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) == 1)/*if return 0 So current->FirstName = word. And if return 1. So current->FirstName > word*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with an equal first name or a bigger one(from the first name you gave) were not found.");
-								flag = 0;
-							}
-						}
-					}
-					/*Build linked list for last name query*/
-					if (!strcmp(field, "last"))
-					{/*Check the operator query*/
-						if (!strcmp(operator, "="))
-						{
-							while (current != NULL)
-							{
-								if (!strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word))/*if 0. i.e they are equal*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDebtors with such a last name were not found");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, "!="))
-						{
-							while (current != NULL)
-							{
-								if (strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word))/*if not 0. i.e they are not equal*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with a different last name(from the last name you gave) were not found.");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, "<"))
-						{
-							while (current != NULL)
-							{
-								if (strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) == -1)/*if return -1. So current->FirstName < word*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with a smaller last name(from the last name you gave) were not found.");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, ">"))
-						{
-							while (current != NULL)
-							{
-								if (strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) == 1)/*if return 1. So current->FirstName > word*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with a bigger last name(from the last name you gave) were not found.");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, "<="))
-						{
-							while (current != NULL)
-							{
-								if (!strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) || strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) == -1)/*if return 0 So current->FirstName = word. And if return -1. So current->FirstName < word*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with an equal last name or a smaller one(from the last name you gave) were not found.");
-								flag = 0;
-							}
-						}
-						else if (!strcmp(operator, ">="))
-						{
-							while (current != NULL)
-							{
-								if (!strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) || strcmp(strcpy(current->LastName, stringToLower(current->LastName)==1), word))/*if return 0 So current->FirstName = word. And if return 1. So current->FirstName > word*/
-									buildNodeQuery(&headQuery, &tailQuery, current);
-								current = current->next;
-							}
-							if (headQuery == NULL)
-							{
-								printf("\nDetors with an equal last name or a bigger one(from the last name you gave) were not found.");
-								flag = 0;
-							}
-						}
-					}
+					word[i - 6] = temp[i];
+					i++;
 				}
-				else
-				{
-					printf("Error!. The word %s is not a name"
-						"\nPlease enter query again.", word);
-					goto Return;
-				}
-
+				word[i - 6] = '\0';
 			}
 			else
 			{
-				printf("Error!. The word %s is not an operator"
-					"\nPlease enter query again.", operator);
-				goto Return;
+				operator[1] = '\0';
+				i = 5;
+				while (temp[i] != '\0')
+				{
+					word[i - 5] = temp[i];
+					i++;
+				}
+				word[i - 5] = '\0';
+			}
+			goto check;
+			operator:
+			scanf("%s", &operator);
+			len = strlen(operator);
+			if (!strcmp(operator, "=") || !strcmp(operator, "!=") || !strcmp(operator, "<") || !strcmp(operator, ">") || !strcmp(operator, "<=") || !strcmp(operator, ">="))
+				goto Word;
+			else if (!strncmp(operator, "=", 1) || !strncmp(operator, "!=", 2) || !strncmp(operator, "<", 1) || !strncmp(operator, ">", 1) || !strncmp(operator, "<=", 2) || !strncmp(operator, ">=", 2))
+			{
+				
+				if (operator[1] == '=')
+				{
+					i = 2;
+					while(operator[i] != '\0')
+					{
+						word[i-2] = operator[i];
+						i++;
+					}
+					operator[2] = '\0';
+					word[i - 2] = '\0';
+				}
+				else
+				{
+					i = 1;
+					while (operator[i] != '\0')
+					{
+						word[i - 1] = operator[i];
+						i++;
+					}
+					operator[1] = '\0';
+					word[i - 1] = '\0';
+				}
+				goto check;
+			}
+		Word:
+			scanf("%s", &word);
+		check:
+			if (checkAlphabet(word))
+			{
+				if (!checkUnnecessaryInputAtQueryEnd())
+					goto Return;
+				strcpy(word, stringToLower(word));
+				/*Build linked list for first name query*/
+				if (!strcmp(field, "first"))
+				{/*Check the operator query*/
+					if (!strcmp(operator, "="))
+					{
+						while (current != NULL)
+						{
+							if (!strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word))/*if 0. i.e they are equal*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDebtors with such a first name were not found");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, "!="))
+					{
+						while (current != NULL)
+						{
+							if (strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word))/*if not 0. i.e they are not equal*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with a different first name(from the first name you gave) were not found.");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, "<"))
+					{
+						while (current != NULL)
+						{
+							if (!strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) == -1)/*if return -1. So current->FirstName < word*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with a smaller first name(from the first name you gave) were not found.");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, ">"))
+					{
+						while (current != NULL)
+						{
+							if (strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) == 1)/*if return 1. So current->FirstName > word*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with a bigger first name(from the first name you gave) were not found.");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, "<="))
+					{
+						while (current != NULL)
+						{
+							if (!strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) || strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) == -1)/*if return 0 So current->FirstName = word. And if return -1. So current->FirstName < word*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with an equal first name or a smaller one(from the first name you gave) were not found.");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, ">="))
+					{
+						while (current != NULL)
+						{
+							if (!strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) || strcmp(strcpy(current->FirstName, stringToLower(current->FirstName)), word) == 1)/*if return 0 So current->FirstName = word. And if return 1. So current->FirstName > word*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with an equal first name or a bigger one(from the first name you gave) were not found.");
+							flag = 0;
+						}
+					}
+				}
+				/*Build linked list for last name query*/
+				if (!strcmp(field, "last"))
+				{/*Check the operator query*/
+					if (!strcmp(operator, "="))
+					{
+						while (current != NULL)
+						{
+							if (!strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word))/*if 0. i.e they are equal*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDebtors with such a last name were not found");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, "!="))
+					{
+						while (current != NULL)
+						{
+							if (strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word))/*if not 0. i.e they are not equal*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with a different last name(from the last name you gave) were not found.");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, "<"))
+					{
+						while (current != NULL)
+						{
+							if (strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) == -1)/*if return -1. So current->FirstName < word*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with a smaller last name(from the last name you gave) were not found.");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, ">"))
+					{
+						while (current != NULL)
+						{
+							if (strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) == 1)/*if return 1. So current->FirstName > word*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with a bigger last name(from the last name you gave) were not found.");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, "<="))
+					{
+						while (current != NULL)
+						{
+							if (!strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) || strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) == -1)/*if return 0 So current->FirstName = word. And if return -1. So current->FirstName < word*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with an equal last name or a smaller one(from the last name you gave) were not found.");
+							flag = 0;
+						}
+					}
+					else if (!strcmp(operator, ">="))
+					{
+						while (current != NULL)
+						{
+							if (!strcmp(strcpy(current->LastName, stringToLower(current->LastName)), word) || strcmp(strcpy(current->LastName, stringToLower(current->LastName) == 1), word))/*if return 0 So current->FirstName = word. And if return 1. So current->FirstName > word*/
+								buildNodeQuery(&headQuery, &tailQuery, current);
+							current = current->next;
+						}
+						if (headQuery == NULL)
+						{
+							printf("\nDetors with an equal last name or a bigger one(from the last name you gave) were not found.");
+							flag = 0;
+						}
+					}
+					else
+					{
+						printf("Error!. The word %s is not an operator"
+							"\nPlease enter query again.", operator);
+						goto Return;
+					}
+				}
 			}
 		}
 		else

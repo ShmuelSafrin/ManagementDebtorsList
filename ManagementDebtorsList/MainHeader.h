@@ -9,5 +9,5 @@
 #include "userFuncs.h"
 #include "utilities.h"
 #define MAX_LINE 200
-
+#define MIDDLE_SIZE 50
 

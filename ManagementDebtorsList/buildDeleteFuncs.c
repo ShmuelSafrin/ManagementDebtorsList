@@ -452,13 +452,13 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 		temp->LastName = (char*)malloc(8);
 		strcpy(temp->LastName, "Missing");
 	}
-	if (temp->ID[0] == NULL)
+	if (temp->ID[0] == 0)
 	{
 		printf("\nYou can't set new line without Id\n");
 		freeOneDebtor(temp);
 		return;
 	}
-	if (temp->TelphonNumber[0] == NULL)
+	if (temp->TelphonNumber[0] == 0)
 		strcpy(temp->TelphonNumber, "Missing");
 	if (temp->TotalDebt == 0)
 	{
@@ -466,7 +466,7 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 		freeOneDebtor(temp);
 		return;
 	}
-	if (temp->FirstDebtsDate[0] == NULL)
+	if (temp->FirstDebtsDate[0] == 0)
 		strcpy(temp->FirstDebtsDate, "Missing");
 	//---------------------------------------------------
 	/*Now we linking the user Debtor to the link list*/
