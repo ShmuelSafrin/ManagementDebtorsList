@@ -143,7 +143,7 @@ int checkUnnecessaryInputAtQueryEnd()
 	{
 		if (*ptr != ' ' && *ptr != '\t')
 		{
-			printf("Unnecessary words at the end of your input"
+			printf("Unnecessary words/letters at the end of your input"
 				"\nPlease re-enter query again.");
 			return 0;
 		}
@@ -155,11 +155,18 @@ char* checkUnnecessaryInputAtSetEnd(char* check)
 {
 	int i;
 	char Return[11]; //= (char*)malloc(11);
-	for (i = 0; i < 10; i++, check++)
+	for (i = 0; i < 10; i++,check++)
 		Return[i] = *check;
 	Return[i] = '\0';
-	if (check[10] != '\0')
+	if (*check != '\0')
 	{
+		if (*check != ' ' && *check != '\t' && *check != ',')
+		{
+			printf("Unnecessary words/letters at the end of your input"
+				"\nPlease re-enter query again.");
+			return "Error";
+		}
+		check++;
 		while (*check)
 		{
 			if (*check != ' ' && *check != '\t')

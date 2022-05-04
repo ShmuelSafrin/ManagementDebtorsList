@@ -32,20 +32,20 @@ void QueriesSetPrint(FILE* fptr, Debtor* head, int* countLines)
 {
 	char temp[8], ch; //ch for case that user didn't enter select/set/print/quit. So we will use getchar(), to clean the rest line
 	printf("\n       --QUERIES-- ||  --SET-- || --PRINT--\n\n");
-	printf("(1. For queries, first type \"select\" and then type the query.\n(2. For set old/new debtors, first type \"set\" and then type the debtor you want to add the file.\n(3. For print the exist update debtors in the file, type \"print\".\n"
+	printf("(1. For queries, first type \"select\" and then type the query."
+		"\n(2. For set old/new debtors, first type \"set\" and then type the debtor you want to add the file."
+		"\n*Note For a new debt type positive number and for a debt payment type negative number"
+		"\n(3. For print the exist update debtors in the file, type \"print\".\n"
 		"\n*Note: in any time, you can type \"quit\" to exit from the Qureies/Set/Print"
-		"\n*Note: spell the fields names(In the query), exactly as"
+		"\n*Note: spell the fields names in the \"query\" and \"set\", exactly as"
 		"\nthe fields are spelled in the table as shown below"
 		"\n------------------------------------------------------------"
 		"\n| first name | last name | id | phone number | debt | date |"
 		"\n------------------------------------------------------------"
 		"\n*Note: You must put a space between words in a query"
 		"\n*Note: in all fielde you can select one of these options to the query: \"=\" , \"!=\" , \"<\" , \">\" , \"<=\" , \">=\""
-		"\n*Note For set, type in this form and sequence: \"set firstName,LastName,Id,phoneNumber,det,date\""
-		"\ni.e set then space.Then type the debtor's details in sequence (without spaces) with a comma between each item(the line set should contain exatly 5 commas)."
-		"\n*Note For a new debt you type the numbrer as positive and for a debt payment you type the number as negative"
 		"\nA query's example: select date >= 05/05/2005  (*Note: the format data is _ _/_ _/_ _ _ _)"
-		"\nA set's example: set Moshe,Choen,123456789,0544123456,500,03/04/2022\n\n-->");
+		"\nA set's example: set first name = Moshe, last name = Burditzov, id = 987654321, phone number = 0000000000, debt = -1000, date = 01/01/1999\n\n-->");
 
 	scanf("%s", &temp);
 	while (strcmp(temp, "quit"))
@@ -75,6 +75,7 @@ void QueriesSetPrint(FILE* fptr, Debtor* head, int* countLines)
 	if (!checkUnnecessaryInputAtQueryEnd())
 		goto input;
 }
+
 void queries(Debtor* head)
 {
 	int flag = 1;

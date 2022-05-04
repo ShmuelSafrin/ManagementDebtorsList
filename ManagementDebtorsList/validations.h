@@ -66,8 +66,9 @@ if there are only spaces or tabs then it deletes them
 and gets the user line set.*/
 char* checkUnnecessaryInputAtSetEnd(char*);
 
-/*The function gets a word with whether capital letters or small letters.
+/*The function for insenstive words.
+The function gets a word with whether capital letters or small letters.
 Then convertes the capital letters to a small one
-and add it to the a diffrent string.
-Then returns the containig only small letters string*/
+and add it to a diffrent string.
+Then returns the containig small letters string*/
 char* stringToLower(char* word);
