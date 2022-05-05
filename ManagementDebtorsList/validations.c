@@ -25,7 +25,7 @@ int checkSizeAndDigits(char* str, int size)
 }
 
 
-int checkCountDelim(char* str, char delim)
+int countDelimiters(char* str, char delim)
 {
 	int count = 0;
 	while (*str)
@@ -40,7 +40,7 @@ int isCorrectAmount(char* token)
 	int len = strlen(token);
 	char* str = (char*)malloc(len + 1);
 	strcpy(str, token);
-	if (checkCountDelim(str, '.') > 1)
+	if (countDelimiters(str, '.') > 1)
 	{
 		free(str);
 		return 0;
@@ -70,17 +70,17 @@ int isCorrectAmount(char* token)
 
 int checkDateValidation(char* date)
 {
-	if (checkCountDelim(date, '/') != 2)
+	if (countDelimiters(date, '/') != 2)
 		return 0;
 	date = strtok(date, "/");
-	if (strcmp(date, "01") < 0)
+	if (strcmp(date, "01") == -1)
 		return 0;
-	if (strcmp(date, "12") > 0)
+	if (strcmp(date, "31") == 1)
 		return 0;
 	date = strtok(NULL, "/");
-	if (strcmp(date, "01") < 0)
+	if (strcmp(date, "01") == -1)
 		return 0;
-	if (strcmp(date, "31") > 0)
+	if (strcmp(date, "12") == 1)
 		return 0;
 	date = strtok(NULL, "/");
 	if (!checkSizeAndDigits(date, 4))

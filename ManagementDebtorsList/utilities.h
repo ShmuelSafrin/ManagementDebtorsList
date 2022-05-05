@@ -1,6 +1,6 @@
 
 /*When we try to open file.
-or try to allocatr a new node struct unsuccessfully
+or try to allocate a new node struct unsuccessfully
 Then we notify to user and suggest him how
 to solve the problem then we exit the program*/
 void Error_Msg(char* msg);

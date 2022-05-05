@@ -3,11 +3,12 @@
 
 void buildNodeFile(FILE* file_ptr, Debtor** head, int* countLines)
 {
-	int flag, length;
+	int flag, length,i;
+	char date[11];
 	char line[MAX_LINE];
 	char copyLine[MAX_LINE];/*Using to check if fileds are empty between the commas*/
 	char delimiter[2] = ",";
-	char* token = NULL, * del;
+	char* token = NULL,*del;
 	Debtor* temp;
 
 	while (fgets(line, MAX_LINE, file_ptr) != NULL)
@@ -18,7 +19,7 @@ void buildNodeFile(FILE* file_ptr, Debtor** head, int* countLines)
 		(*countLines)++;
 		flag = 0;
 		del = NULL;//reset del for the new line
-		int count = checkCountDelim(line, ',');
+		int count = countDelimiters(line, ',');
 		if (!strcmp(line, ""))
 		{
 			printf("(An empty line in line %d) --> (Please ERASE!! that line)\n\n", *countLines);
@@ -180,12 +181,22 @@ void buildNodeFile(FILE* file_ptr, Debtor** head, int* countLines)
 		}
 		else
 		{
-			strcpy(temp->Date, token);
-			if (!checkDateValidation(token))
+			if (strstr(token, " ") || strstr(token, "\t"))
+			{
+				printf("\n(Error in line %d) --> Irrelevant words at the line end.\nthe program didn't get the line.\n(Please delete these words)\n\n", *countLines);
+				freeOneDebtor(temp);
+				continue;
+			}
+			for (i = 0; i < 10; i++)
+				date[i] = token[i];
+			date[i] = '\0';
+			if(!checkDateValidation(token))
 			{
 				printf("\n(Warning Invalid Date in line % d) -- > The Date should be in this format  _ _/_ _/_ _ _ _, and with days from 01 to 12 and month from 01 to 31.\nthe program got the line(Not the Date).\n(Please correct the date in the file\n", *countLines);
 				strcpy(temp->Date, "Invalid");
 			}
+			else
+				strcpy(temp->Date, date);
 		}
 		//---------------------------------------------------
 		/*Now we linking the new Detor to the link list*/
@@ -437,7 +448,7 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 		else
 		{
 		Irrelevant:
-			printf("Error!,  Irrelevant words are in the set");
+			printf("Error!, Irrelevant words are in the set");
 			freeOneDebtor(temp);
 			return;
 		}

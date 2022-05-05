@@ -8,8 +8,6 @@ typedef struct Debtor
 	float Debt;
 	struct DetorList* next;
 }Debtor;
-
-
 /*This function is for the fields of the first name and the last name
 it checks that they contain only the letters of the alphabet
 by passing on evry character of the name if a character is found
@@ -20,7 +18,7 @@ int checkAlphabet(char*);
 /*This function goes over the string line
 and each time it finds a given delimter character.
 It increases the count by 1*/
-int checkCountDelim(char*, char);
+int countDelimiters(char*, char);
 
 /*This function checkes proper size of chars, if not return 0.
 then the func go through all the charecters in the string
