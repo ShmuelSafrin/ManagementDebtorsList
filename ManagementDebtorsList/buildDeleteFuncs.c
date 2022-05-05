@@ -169,22 +169,22 @@ void buildNodeFile(FILE* file_ptr, Debtor** head, int* countLines)
 			freeOneDebtor(temp);
 			continue;
 		}
-		temp->TotalDebt = atof(token);
+		temp->Debt = atof(token);
 
 		/*for the dateDebt*/
 		token = strtok(NULL, delimiter);
 		if (token == NULL)
 		{
 			printf("\n(Warning in line %d) --> The debt date is missing.\nthe program got the line\n(Please add the debt date in the file)\n", *countLines);
-			strcpy(temp->FirstDebtsDate, "Missing");
+			strcpy(temp->Date, "Missing");
 		}
 		else
 		{
-			strcpy(temp->FirstDebtsDate, token);
+			strcpy(temp->Date, token);
 			if (!checkDateValidation(token))
 			{
 				printf("\n(Warning Invalid Date in line % d) -- > The Date should be in this format  _ _/_ _/_ _ _ _, and with days from 01 to 12 and month from 01 to 31.\nthe program got the line(Not the Date).\n(Please correct the date in the file\n", *countLines);
-				strcpy(temp->FirstDebtsDate, "Invalid");
+				strcpy(temp->Date, "Invalid");
 			}
 		}
 		//---------------------------------------------------
@@ -233,7 +233,7 @@ void addNodeFileToList(Debtor** head, Debtor* node, int* lineNumber)
 			//and update firstDetsDate to the oldest date.
 			//as well we free all the temp inculding all is dynamic fields
 				strcpy(current->TelphonNumber, node->TelphonNumber);
-				current->TotalDebt += node->TotalDebt;
+				current->Debt += node->Debt;
 				/*If in one user line ther's a missinig date
 				so we update his node with missing
 				if it's not missing but invalid so
@@ -242,15 +242,15 @@ void addNodeFileToList(Debtor** head, Debtor* node, int* lineNumber)
 				valid date so we update the earliest date
 				The function earlierDate return
 				the int who's date is eariler*/
-				if (!strcmp(node->FirstDebtsDate, "Missing"))
-					strcpy(current->FirstDebtsDate, "Missing");
-				else if (!strcmp(node->FirstDebtsDate, "Invalid") && strcmp(current->FirstDebtsDate, "Missing"))
-					strcpy(current->FirstDebtsDate, "Invalid");
+				if (!strcmp(node->Date, "Missing"))
+					strcpy(current->Date, "Missing");
+				else if (!strcmp(node->Date, "Invalid") && strcmp(current->Date, "Missing"))
+					strcpy(current->Date, "Invalid");
 				/*In this case node->FirstDebtsDate = valid date. So we check if current->FirstDebtsDate = valid as well because otherwise it's not posible to check the earlier date*/
-				else if(strcmp(current->FirstDebtsDate, "Missing") && strcmp(current->FirstDebtsDate, "Invalid"))
+				else if(strcmp(current->Date, "Missing") && strcmp(current->Date, "Invalid"))
 				{
-					if (checkEarlierDate(node->FirstDebtsDate, current->FirstDebtsDate) == -1)
-						strcpy(current->FirstDebtsDate, node->FirstDebtsDate);
+					if (checkEarlierDate(node->Date, current->Date) == -1)
+						strcpy(current->Date, node->Date);
 				}
 				freeOneDebtor(node);
 			}
@@ -274,8 +274,8 @@ void buildNodeQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* current)
 	strcpy(temp->LastName, current->LastName);
 	strcpy(temp->ID, current->ID);
 	strcpy(temp->TelphonNumber, current->TelphonNumber);
-	temp->TotalDebt = current->TotalDebt;
-	strcpy(temp->FirstDebtsDate, current->FirstDebtsDate);
+	temp->Debt = current->Debt;
+	strcpy(temp->Date, current->Date);
 	addNodeQueryToList(headQuery, tailQuery, temp);
 }
 
@@ -320,7 +320,7 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 		Error_Msg("Memmory allocation failed!!. (Try closing other programs that are currently running.\nIf you are still having a problem try restarting your computer.)\n");
 	}
 	token = strtok(line, delimiters);
-	while(token != NULL)
+	while (token != NULL)
 	{
 		if (flag)
 			flag = 0;
@@ -329,7 +329,7 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 			token = strtok(NULL, delimiters);
 			if (token == NULL)
 				break;
-		}	
+		}
 		/*for the First Name*/
 		if (!strcmp(token, "first"))
 		{
@@ -338,7 +338,7 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 				token = strtok(NULL, " \t,=");
 			else
 				goto Irrelevant;
-			
+
 			if (!checkAlphabet(token))
 			{
 				printf("\nWarning, The First Name is Unknown Characters.\n");
@@ -388,7 +388,7 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 			}
 		}
 		/*for the TelphonNumber*/
-		else if(strstr(token, "phone number"))
+		else if (strstr(token, "phone number"))
 		{
 			token = strtok(NULL, " \t,=");
 			if (*token != '0')
@@ -396,7 +396,7 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 				printf("\Warning, The phone number should start with digit \"0\"\n");
 				strcpy(temp->TelphonNumber, "Invalid");
 			}
-			else if(!checkSizeAndDigits(token, 10))
+			else if (!checkSizeAndDigits(token, 10))
 			{
 				printf("\Warning, The phone number should be exactly 9 digits\n");
 				strcpy(temp->TelphonNumber, "Invalid");
@@ -416,23 +416,23 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 				freeOneDebtor(temp);
 				return;
 			}
-			temp->TotalDebt = atof(token);
+			temp->Debt = atof(token);
 		}
 
 		/*for the dateDebt*/
 		else if (strstr(token, "date"))
 		{
 			token = strtok(NULL, " \t,=");
-			strcpy(copy,token);
+			strcpy(copy, token);
 			if (!checkDateValidation(copy))
 			{
 				printf("\nWarning, Invalid Date."
 					"\nThe Date should be in this format _ _/_ _/_ _ _ _,"
 					"\nAnd with days from 01 to 12. Month from 01 to 31\n\n.");
-				strcpy(temp->FirstDebtsDate, "Invalid");
+				strcpy(temp->Date, "Invalid");
 			}
 			else
-				strcpy(temp->FirstDebtsDate, token);
+				strcpy(temp->Date, token);
 		}
 		else
 		{
@@ -442,32 +442,42 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 			return;
 		}
 	}
-	if(temp->FirstName == NULL)
-	{
-		temp->FirstName = (char*)malloc(8);
-		strcpy(temp->FirstName, "Missing");
-	}
-	if (temp->LastName == NULL)
-	{
-		temp->LastName = (char*)malloc(8);
-		strcpy(temp->LastName, "Missing");
-	}
 	if (temp->ID[0] == 0)
 	{
 		printf("\nYou can't set new line without Id\n");
 		freeOneDebtor(temp);
 		return;
 	}
-	if (temp->TelphonNumber[0] == 0)
-		strcpy(temp->TelphonNumber, "Missing");
-	if (temp->TotalDebt == 0)
+	if (temp->Debt == 0)
 	{
 		printf("\nYou can't set new line without debt\n");
 		freeOneDebtor(temp);
 		return;
 	}
-	if (temp->FirstDebtsDate[0] == 0)
-		strcpy(temp->FirstDebtsDate, "Missing");
+	if(temp->FirstName == NULL)
+	{
+		temp->FirstName = (char*)malloc(8);
+		strcpy(temp->FirstName, "Missing");
+		printf("\n*Note the first name is missing\n");
+	}
+	if (temp->LastName == NULL)
+	{
+		temp->LastName = (char*)malloc(8);
+		strcpy(temp->LastName, "Missing");
+		printf("\n*Note the last name is missing\n");
+	}
+	if (temp->TelphonNumber[0] == 0)
+	{
+		strcpy(temp->TelphonNumber, "Missing");
+		printf("\n*Note the phone number is missing\n");
+
+	}
+	if (temp->Date[0] == 0)
+	{
+		strcpy(temp->Date, "Missing");
+		printf("\n*Note the date is missing\n");
+
+	}
 	//---------------------------------------------------
 	/*Now we linking the user Debtor to the link list*/
 	//---------------------------------------------------
@@ -486,7 +496,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 		  2)We add the valid line to the file
 		  3)Notify user that his line added to the file successfully (in line x)*/
 		(*countLines)++;
-		fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->TelphonNumber, node->TotalDebt, node->FirstDebtsDate);
+		fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->TelphonNumber, node->Debt, node->Date);
 		printf("\n\nYour set line added to the file successfully (in line %d)", *countLines);
 	}
 	else//There are alredy Detors in the linked list
@@ -501,7 +511,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 		if (current == NULL)//i.e not exists this Detor in the link list with the same Id. 
 		{
 			current = *head;
-			if (node->TotalDebt < current->TotalDebt)
+			if (node->Debt < current->Debt)
 			{
 				node->next = current;
 				*head = node;
@@ -510,7 +520,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 			{
 				prev = *head;
 				after = prev->next;
-				while ((after != NULL) && (node->TotalDebt > after->TotalDebt))
+				while ((after != NULL) && (node->Debt > after->Debt))
 				{
 					prev = after;
 					after = after->next;
@@ -531,7 +541,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 			3)Notify user that his line added to the file successfully (in line x)*/
 
 			(*countLines)++;
-			fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->TelphonNumber, node->TotalDebt, node->FirstDebtsDate);
+			fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->TelphonNumber, node->Debt, node->Date);
 			printf("\n\nYour set line added to the file successfully (in line %d)", *countLines);
 		}
 		else//This Detor is alredy in the linked list
@@ -543,39 +553,39 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 					printf("\nError, The first name does not match the name that is already exists in the file with the same ID.\n");
 				if (strcmp(node->LastName, current->LastName))
 					printf("\nError, The last name does not match the name that is already exists in the file with the same ID.\n");
-				printf("The program didn't get this line.\nThe line was not added to the file.\n");
-				freeOneDebtor(node);
+				printf("\nThe line was not added to the file.\n");
+				goto free;
 			}
 			else//The names are matchinig.
 			{/*1)Increasing the count lines by one
 			   2)We add the valid line to the file
 			   3)Notify user that his line added to the file successfully (in line x)*/
 				(*countLines)++;
-				fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->TelphonNumber, node->TotalDebt, node->FirstDebtsDate);
+				fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->TelphonNumber, node->Debt, node->Date);
 				printf("\n\nYour set line added to the file successfully (in line %d)", *countLines);
 				//then we update the TotalSum for our list.
 				//and update firstDetsDate to the oldest date for our list.
 				//as well we free all the temp inculding all is dynamic fields
 				strcpy(current->TelphonNumber, node->TelphonNumber);
-				current->TotalDebt += node->TotalDebt;
+				current->Debt += node->Debt;
 				/*The function olderDate return the int who's date is older
 				then if temp->FirstDebtsDate is older date we copy him
 				to the linked list in the field of the date
 				otherwise we do nothing*/
-				if (!strcmp(node->FirstDebtsDate, "Missing"))
-					strcpy(current->FirstDebtsDate, "Missing");
-				else if (!strcmp(node->FirstDebtsDate, "Invalid") && strcmp(current->FirstDebtsDate, "Missing"))
-					strcpy(current->FirstDebtsDate, "Invalid");
-				else if(strcmp(current->FirstDebtsDate, "Missing") && strcmp(current->FirstDebtsDate, "Invalid"))
+				if (!strcmp(node->Date, "Missing"))
+					strcpy(current->Date, "Missing");
+				else if (!strcmp(node->Date, "Invalid") && strcmp(current->Date, "Missing"))
+					strcpy(current->Date, "Invalid");
+				else if(strcmp(current->Date, "Missing") && strcmp(current->Date, "Invalid"))
 				{
-					if(checkEarlierDate(node->FirstDebtsDate, current->FirstDebtsDate) == -1)
-						strcpy(current->FirstDebtsDate, node->FirstDebtsDate);
+					if(checkEarlierDate(node->Date, current->Date) == -1)
+						strcpy(current->Date, node->Date);
 				}
 				/*Now we search the place for current if needed*/
 				if (*head == current)//i.e head is alredy pointinig on the node(because it Total Debt was the smallest debt)
 				{
 					prev = (*head)->next;
-					if (current->TotalDebt <= prev->TotalDebt)
+					if (current->Debt <= prev->Debt)
 						goto free;
 					else
 					{
@@ -587,7 +597,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 				prev = after = temp1 = temp2 = *head;
 				/*In case that current->totalDebt < head
 				So we need to update the head as well to point on current*/
-				if(prev->TotalDebt > current->TotalDebt)//current = node from earlier
+				if(prev->Debt > current->Debt)//current = node from earlier
 				{
 					while (after->next != current)
 						after = after->next;
@@ -601,9 +611,9 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 					// this while is also for the else ahead
 					while (prev->next != current)
 						prev = prev->next;
-					if (prev->TotalDebt > current->TotalDebt)//primery case
+					if (prev->Debt > current->Debt)//primery case
 					{
-						while (temp1->TotalDebt < current->TotalDebt && temp1->next != prev)
+						while (temp1->Debt < current->Debt && temp1->next != prev)
 							temp1 = temp1->next;
 						if (temp1->next == prev)
 						{
@@ -621,14 +631,14 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 						}
 
 					}
-					else if (prev->TotalDebt < current->TotalDebt)//primery case 
+					else if (prev->Debt < current->Debt)//primery case 
 					{//here we need to check if the node after cuurrent smaller than current (but in case that prev equal to current so for shur the node after is ok
 						after = current->next;
 						if (after == NULL)
 						{
 							goto free;
 						}
-						if (current->TotalDebt > after->TotalDebt)
+						if (current->Debt > after->Debt)
 						{
 							if (after->next == NULL)
 							{
@@ -639,7 +649,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 							else if (after->next != NULL)
 							{
 								temp1 = after->next;
-								while (current->TotalDebt > temp1->TotalDebt && temp1->next != NULL)
+								while (current->Debt > temp1->Debt && temp1->next != NULL)
 									temp1 = temp1->next;
 								if (temp1->next == NULL)
 								{

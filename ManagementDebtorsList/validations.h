@@ -4,8 +4,8 @@ typedef struct Debtor
 	char* LastName;
 	char ID[10];//should be exactly 9 chars. Of digits only.
 	char TelphonNumber[11];//should be exactly 10 chars.Digits only, And start with digit 0
-	float TotalDebt;
-	char FirstDebtsDate[11];
+	char Date[11];
+	float Debt;
 	struct DetorList* next;
 }Debtor;
 

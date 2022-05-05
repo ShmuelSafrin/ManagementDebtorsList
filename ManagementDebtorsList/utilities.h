@@ -1,7 +1,8 @@
 
-/*When we try to open the file unsuccessfully
+/*When we try to open file.
+or try to allocatr a new node struct unsuccessfully
 Then we notify to user and suggest him how
-solve the problem then we exit the program*/
+to solve the problem then we exit the program*/
 void Error_Msg(char* msg);
 
 /*The order of the print lines will be by ascending order

@@ -39,7 +39,7 @@ Debtor* SortedMerge(Debtor* a, Debtor* b)
 		return (a);
 
 	/* Pick either a or b, and recur */
-	if (a->TotalDebt < b->TotalDebt) {
+	if (a->Debt < b->Debt) {
 		result = a;
 		result->next = SortedMerge(a->next, b);
 	}
