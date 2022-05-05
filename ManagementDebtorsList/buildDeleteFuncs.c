@@ -187,9 +187,7 @@ void buildNodeFile(FILE* file_ptr, Debtor** head, int* countLines)
 				freeOneDebtor(temp);
 				continue;
 			}
-			for (i = 0; i < 10; i++)
-				date[i] = token[i];
-			date[i] = '\0';
+			strcpy(date, token);
 			if(!checkDateValidation(token))
 			{
 				printf("\n(Warning Invalid Date in line % d) -- > The Date should be in this format  _ _/_ _/_ _ _ _, and with days from 01 to 12 and month from 01 to 31.\nthe program got the line(Not the Date).\n(Please correct the date in the file\n", *countLines);
