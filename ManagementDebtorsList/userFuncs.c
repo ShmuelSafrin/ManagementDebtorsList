@@ -21,7 +21,7 @@ void print(Debtor* head, int flag)
 		else
 		{
 			printf("|%-15s %-15s %-15s %-15s %-15.2f %-15s   |\n", head->FirstName, head->LastName,
-				head->ID, head->TelphonNumber, head->Debt, head->Date);
+				head->ID, head->PhoneNumber, head->Debt, head->Date);
 			printf("----------------------------------------------------------------------------------------------------\n");
 			head = head->next;
 		}
@@ -686,7 +686,7 @@ void queries(Debtor* head)
 					{
 						while (current != NULL)
 						{
-							if (!strcmp(current->TelphonNumber, word))/*if 0. i.e they are equal*/
+							if (!strcmp(current->PhoneNumber, word))/*if 0. i.e they are equal*/
 								buildNodeQuery(&headQuery, &tailQuery, current);
 							current = current->next;
 						}
@@ -700,7 +700,7 @@ void queries(Debtor* head)
 					{
 						while (current != NULL)
 						{
-							if (strcmp(current->TelphonNumber, word))/*if not 0. i.e they are not equal*/
+							if (strcmp(current->PhoneNumber, word))/*if not 0. i.e they are not equal*/
 								buildNodeQuery(&headQuery, &tailQuery, current);
 							current = current->next;
 						}
@@ -714,7 +714,7 @@ void queries(Debtor* head)
 					{
 						while (current != NULL)
 						{
-							if (strcmp(current->TelphonNumber, word) == -1)/*if return -1. So current->FirstName < word*/
+							if (strcmp(current->PhoneNumber, word) == -1)/*if return -1. So current->FirstName < word*/
 								buildNodeQuery(&headQuery, &tailQuery, current);
 							current = current->next;
 						}
@@ -728,7 +728,7 @@ void queries(Debtor* head)
 					{
 						while (current != NULL)
 						{
-							if (strcmp(current->TelphonNumber, word)==1)/*if return 1. So current->FirstName > word*/
+							if (strcmp(current->PhoneNumber, word)==1)/*if return 1. So current->FirstName > word*/
 								buildNodeQuery(&headQuery, &tailQuery, current);
 							current = current->next;
 						}
@@ -742,7 +742,7 @@ void queries(Debtor* head)
 					{
 						while (current != NULL)
 						{
-							if (!strcmp(current->TelphonNumber, word) || strcmp(current->TelphonNumber, word) == -1)/*if return 0 So current->FirstName = word. And if return -1. So current->FirstName < word*/
+							if (!strcmp(current->PhoneNumber, word) || strcmp(current->PhoneNumber, word) == -1)/*if return 0 So current->FirstName = word. And if return -1. So current->FirstName < word*/
 								buildNodeQuery(&headQuery, &tailQuery, current);
 							current = current->next;
 						}
@@ -756,7 +756,7 @@ void queries(Debtor* head)
 					{
 						while (current != NULL)
 						{
-							if (!strcmp(current->TelphonNumber, word) || strcmp(current->TelphonNumber, word)==1)/*if return 0 So current->FirstName = word. And if return 1. So current->FirstName > word*/
+							if (!strcmp(current->PhoneNumber, word) || strcmp(current->PhoneNumber, word)==1)/*if return 0 So current->FirstName = word. And if return 1. So current->FirstName > word*/
 								buildNodeQuery(&headQuery, &tailQuery, current);
 							current = current->next;
 						}

@@ -35,11 +35,22 @@ int countDelimiters(char* str, char delim)
 	}
 	return count;
 }
+int checkFormatLine(char* line,int *lineNumber)
+{
+	int count = countDelimiters(line, ',');
+	if (count == 0)
+		return 0;
+	if (count != 5)
+	{
+		printf("\n(Error in line %d) --> Incorrect format line(need 5 commas).\nThe line was not accepted in the program.\n",*lineNumber);
+		return 0;
+	}
+	return 1;
+}
 int isCorrectAmount(char* token)
 {
-	int len = strlen(token);
-	char* str = (char*)malloc(len + 1);
-	strcpy(str, token);
+	char* str = token;
+	int len = strlen(str);
 	if (countDelimiters(str, '.') > 1)
 	{
 		free(str);
@@ -166,3 +177,6 @@ char* stringToLower(char *word)
 	lowerWord[i] = '\0';
 	return lowerWord;
 }
+
+
+

@@ -3,9 +3,9 @@ typedef struct Debtor
 	char* FirstName;
 	char* LastName;
 	char ID[10];//should be exactly 9 chars. Of digits only.
-	char TelphonNumber[11];//should be exactly 10 chars.Digits only, And start with digit 0
-	char Date[11];
+	char PhoneNumber[11];//should be exactly 10 chars.Digits only, And start with digit 0
 	float Debt;
+	char Date[11];
 	struct DetorList* next;
 }Debtor;
 /*This function is for the fields of the first name and the last name
@@ -19,6 +19,10 @@ int checkAlphabet(char*);
 and each time it finds a given delimter character.
 It increases the count by 1*/
 int countDelimiters(char*, char);
+
+/*This function gets a line from a file and checkes
+if it has the format of 5 commas*/
+int checkFormatLine(char*,int*);
 
 /*This function checkes proper size of chars, if not return 0.
 then the func go through all the charecters in the string
@@ -64,3 +68,6 @@ Then convertes the capital letters to a small one
 and add it to a diffrent string.
 Then returns the containig small letters string*/
 char* stringToLower(char* word);
+
+
+

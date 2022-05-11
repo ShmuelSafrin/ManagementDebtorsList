@@ -1,205 +1,218 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "MainHeader.h"
 
+void checkAndSetFirstLastNameExistField(int flag, char** debtorField, char* token, int* lineNumber)
+{
+	if (!checkAlphabet(token))
+	{
+		char field[6];
+		if (!flag)
+			strcpy(field,"First");
+		else
+			strcpy(field,"Last");
+		printf("\n(Warning in line %d) --> The %s Name is Unknown Characters.\n",*lineNumber,field);
+		*debtorField = (char*)malloc(13);
+		strcpy(*debtorField, "UnknownChars");
+	}
+	else
+	{
+		*debtorField = (char*)malloc(strlen(token) + 1);
+		strcpy(*debtorField, token);
+	}
+}
+
+int checkAndSetIdExistField(char* debtorField, char* token, int* lineNumber)
+{
+	if (!checkSizeAndDigits(token, 9))
+	{
+		printf("\n(Error in line %d) --> The Id should be exactly 9 digits\n.The line was not accepted in the program.\n", *lineNumber);
+		return 0;
+	}
+	strcpy(debtorField, token);
+	return 1;
+}
+
+void checkAndSetPhoneNumberExistField(char* debtorField, char* token, int* lineNumber)
+{
+	if (*token != '0')
+	{
+		printf("\n(Warning in line % d) --> The phone number should start with digit 0.\n", *lineNumber);
+		strcpy(debtorField, "Invalid");
+	}
+	else if (!checkSizeAndDigits(token, 10))
+	{
+		printf("\n(Warning in line %d) --> The phone number should be exactly 10 digits.\n", *lineNumber);
+		strcpy(debtorField, "Invalid");
+	}
+	else
+		strcpy(debtorField, token);
+}
+
+int checkAndSetDebtExistField(float *debtorField, char* field, int* lineNumber)
+{
+	if (!(isCorrectAmount(field)))
+	{
+		printf("\n(Error in line %d) --> The debt is invalid.\nThe line was not accepted in the program.\n", *lineNumber);
+		freeOneDebtor(field);
+		return 0;
+	}
+	*debtorField = atof(field);
+	return 1;
+}
+
+int checkAndSetDateExistField(char* debtorField, char* field, int* lineNumber)
+{
+	if (strstr(field, " ") || strstr(field, "\t"))
+	{
+		int i = 0;
+		char check[MIDDLE_SIZE];
+		strcpy(check, field);
+		field = strtok(field, " \t");
+		while (check[i] != ' ' && check[i] != '\t')
+			i++;
+		while (check[i] == ' ' || check[i] == '\t')
+			i++;
+		if (check[i] != '\0')
+		{
+			printf("\n(Error in line %d) --> Irrelevant words at the line end.\nThe line was not accepted in the program.\n", *lineNumber);
+			return 0;
+		}
+	}
+	char copy[MIDDLE_SIZE];
+	strcpy(copy, field);
+	if (!checkDateValidation(copy))
+	{
+		printf("\n(Warning Invalid Date in line %d) --> The Date should be in this format  _ _/_ _/_ _ _ _,\nAnd with days from 01 to 12 and month from 01 to 31.\n", *lineNumber);
+		strcpy(debtorField, "Invalid");
+	}
+	else
+		strcpy(debtorField, field);
+	return 1;
+}
+
+int handleMissingField(Debtor* temp, int* i, int* lineNumber)
+{
+	switch (*i)
+	{
+			
+		case 0://First name
+			printf("\n(Warning in line %d) --> The First Name is missing.\n", *lineNumber);
+			temp->FirstName = (char*)malloc(8);
+			strcpy(temp->FirstName, "Missing");
+			break;
+		case 1://Last name
+			printf("\n(Warning in line %d) --> The Last Name is missing.\n", *lineNumber);
+			temp->LastName = (char*)malloc(8);
+			strcpy(temp->LastName, "Missing");
+			break;
+		case 2://Id
+			printf("\n(Erorr in line %d) --> The Id is missing.\nThe line was not accepted in the program.\n", *lineNumber);
+			freeOneDebtor(temp);
+			return 0;
+		case 3://Phone
+			printf("\n(Warning in line %d) --> The phone number is missing.\n", *lineNumber);
+			strcpy(temp->PhoneNumber, "Missing");
+			break;
+		case 4://Debt
+			printf("\n(Erorr in line %d) --> The debt amount is missing.\nThe line was not accepted in the program.\n", *lineNumber);
+			freeOneDebtor(temp);
+			return 0;
+		case 5://Date
+			printf("\n(Warning in line %d) --> The date debt is missing.\n",*lineNumber);
+			strcpy(temp->Date, "Missing");
+	}
+}
+
+int handleExistingField(Debtor* temp,char *field, int* i, int* lineNumber)
+{
+	switch (*i)
+	{
+
+	case 0://First name
+		checkAndSetFirstLastNameExistField(0, &(temp->FirstName), field, lineNumber);
+		break;
+	case 1://Last name
+		checkAndSetFirstLastNameExistField(1, &(temp->LastName),field, lineNumber);
+		break;
+	case 2://Id
+		if (!checkAndSetIdExistField(temp->ID,field, lineNumber))
+		{
+			freeOneDebtor(temp);
+			return 0;
+		}
+		return 1;
+	case 3://Phone
+		checkAndSetPhoneNumberExistField(temp->PhoneNumber, field, lineNumber);
+		break;
+	case 4://Debt
+		if (!checkAndSetDebtExistField(&(temp->Debt), field, lineNumber))
+		{
+			freeOneDebtor(temp);
+			return 0;
+		}
+		return 1;
+	case 5://Date
+		if (!checkAndSetDateExistField(temp->Date, field, lineNumber))
+		{
+			freeOneDebtor(temp);
+			return 0;
+		}
+		return 1;
+	}
+}
+
 void buildNodeFile(FILE* file_ptr, Debtor** head, int* countLines)
 {
-	int flag, length,i;
+	int length, i, flag = 0;
 	char date[11];
 	char line[MAX_LINE];
-	char copyLine[MAX_LINE];/*Using to check if fileds are empty between the commas*/
+	char copyline[MAX_LINE];
 	char delimiter[2] = ",";
-	char* token = NULL,*del;
+	char* column = NULL, * delim;
 	Debtor* temp;
 
+	unsigned char column_index = 0;
+	//char* column_p[MAX_COLUMN];
+	//char line[] = "john,doe,123456789,-100";
+getNewLine:
+	i = 0;
 	while (fgets(line, MAX_LINE, file_ptr) != NULL)
 	{
-		length = strlen(line);
-		if (line[length - 1] == '\n')
-			line[length - 1] = '\0';
+		line[strlen(line) - 1] = '\0';
+		strcpy(copyline, line);
 		(*countLines)++;
-		flag = 0;
-		del = NULL;//reset del for the new line
-		int count = countDelimiters(line, ',');
-		if (!strcmp(line, ""))
-		{
-			printf("(An empty line in line %d) --> (Please ERASE!! that line)\n\n", *countLines);
-			continue;
-		}
-		else if (count > 5)
-		{
-			printf("(Error in line %d) --> Too many arguments.\nthe program didn't get the line\n(Please make shure that evry line, contains exactly 6 arguments)\n", *countLines);
-			continue;
-		}
-		else if (count < 5)
-		{
-			printf("(Error in line %d) --> Too few arguments.\nthe program didn't get the line.\n(Please make shure that evry line, contains exactly 6 arguments)\n", *countLines);
-			continue;
-		}
+
+		if (!checkFormatLine(line, countLines))
+			goto getNewLine;
 		temp = (Debtor*)malloc(sizeof(Debtor));
 		if (temp == NULL)//check if the allocation failed
 		{
 			Error_Msg("Memmory allocation failed!!. (Try closing other programs that are currently running.\nIf you are still having a problem try restarting your computer.)\n");
 		}
-		strcpy(copyLine, line);
-		/*Get the first token(the First Name)*/
-		if (line[0] == ',')
-		{/*Means that the first field is empty*/
-			printf("\n(Warning in line %d) --> The First Name is missing.\nthe program got the line\n(Please add the First Name in the file)\n", *countLines);
-			temp->FirstName = (char*)malloc(8);
-			strcpy(temp->FirstName, "Missing");
-			flag = 1;
-		}
-		else
+		/*--------------Here we start to split each line to fields by it commas------------------ */
+		delim = copyline;
+		column = strtok(line, ",");
+		do
 		{
-			token = strtok(line, delimiter);
-			if (!checkAlphabet(token))
+			while (*delim == ',')
 			{
-				printf("\n(Warning in line %d) --> The First Name is Unknown Characters.\nthe program got the line\n(Please correct the First Name in the file)\n", *countLines);
-				temp->FirstName = (char*)malloc(13);
-				strcpy(temp->FirstName, "UnknownChars");
+				if (!handleMissingField(temp, &i, countLines))
+					goto getNewLine;
+				delim++;
+				i++;
 			}
-			else
-			{
-				length = strlen(token);
-				temp->FirstName = (char*)malloc(length + 1);
-				strcpy(temp->FirstName, token);
-			}
-		}
-		/*for the Last Name*/
-		del = strchr(copyLine, ',');
-		/*del gets evry time a ',' from copyLine.
-		And then he advances one char after the ','
-		to see if ther's right away another ','.
-		If so it means that we have empty field.
-		So we dont't use for this field the function strtok*/
-		del = strchr(del, ',');
-		del++;
-		if (*del == ',')//if LaststName,Missing(So we don't use strtok(line))
-		{
-			printf("\n(Warning in line %d) --> The Last Name is missing.\nthe program got the line\n(Please add the Last Name in the file)\n", *countLines);
-			temp->LastName = (char*)malloc(8);
-			strcpy(temp->LastName, "Missing");
-		}
-		else
-		{
-			if (flag)//Meaning we didn't use "line" for strtok
-			{
-				token = strtok(line, delimiter);
-				flag = 0;
-			}
-			else
-				token = strtok(NULL, delimiter);
-			if (!checkAlphabet(token))
-			{
-				printf("\n(Warning in line %d) --> The Last Name is Unknown Characters.\nthe program got the line\n(Please correct the Last Name in the file)\n", *countLines);
-				temp->LastName = (char*)malloc(13);
-				strcpy(temp->LastName, "UnknownChars");
-			}
-			else
-			{
-				length = strlen(token);
-				temp->LastName = (char*)malloc((length + 1));
-				strcpy(temp->LastName, token);
-			}
-		}
-		/*for the ID*/
-		del = strchr(del, ',');
-		del++;
-		if (*del == ',')//i.e Id's field is empty
-		{
-			printf("\n(Error in line %d) --> The Id Missing.\nthe program didn't get the line.\n(Please add the Id in file)\n\n", *countLines);
-			del = NULL;
-			continue;
-		}
-		//(we don't need the else scope. But for ease of reading I used it)
-		else//i.e Id's field is not empty
-		{
-			if (flag)//i.e stil we didn't use "line" for strtok
-				token = strtok(line, delimiter);
-			else
-				token = strtok(NULL, delimiter);
-		}
-		if (!checkSizeAndDigits(token, 9))
-		{
-			printf("\n(Error in line %d) --> The Id should be exactly 9 digits(not letters).\nthe program didn't get the line.\n(Please make shure that evry Id in file, contains exactly 9 digits only)\n\n", *countLines);
-			freeOneDebtor(temp);
-			continue;
-		}
-		strcpy(temp->ID, token);
-
-		/*for the TelphonNumber*/
-		del = strchr(del, ',');
-		del++;
-		if (*del == ',')
-		{
-			printf("\n(Warning Missing Telphon Number in line % d) -- > The program got the line.\n(Please add the Telphon Number in the file)\n\n", *countLines);
-			strcpy(temp->TelphonNumber, "Missing");
-		}
-		else
-		{/*Here we don't need to check that flag == 0.
-		Because if indeed flag was 0 so it means that the Id's field
-		was empty and hence our line wasn't accepted at all.
-		Because if Id missing we would continue to the next line*/
-			token = strtok(NULL, delimiter);
-			if (*token != '0')
-			{
-				printf("\n(Warning Invalid Telphon Number in line % d) -- > The Telphon Number should start with digit 0.\nthe program got the line(Not the Telphon number).\n", *countLines);
-				strcpy(temp->TelphonNumber, "Invalid");
-			}
-			else if (!checkSizeAndDigits(token, 10))
-			{
-				printf("\n(Warning Invalid Telphon Number in line % d) -- > The Telphon Number should be exactly 10 digits(not leters).\nthe program got the line(Not the Telphon number).\n", *countLines);
-				strcpy(temp->TelphonNumber, "Invalid");
-			}
-			else
-				strcpy(temp->TelphonNumber, token);
-		}
-		/*for the amountDebt*/
-		del = strchr(del, ',');
-		del++;
-		if (*del == ',')
-		{
-			printf("\n(Error in line %d) --> The amount debt is missinig.\nthe program didn't get the line\n(Please add the debt in the file)\n", *countLines);
-			freeOneDebtor(temp);
-			continue;
-		}
-		token = strtok(NULL, delimiter);
-		if (!(isCorrectAmount(token)))
-		{
-			printf("\n(Error in line %d) --> The amount debt is incorrect.\nthe program didn't get the line\n(Please fix the debt in the file)\n", *countLines);
-			freeOneDebtor(temp);
-			continue;
-		}
-		temp->Debt = atof(token);
-
-		/*for the dateDebt*/
-		token = strtok(NULL, delimiter);
-		if (token == NULL)
-		{
-			printf("\n(Warning in line %d) --> The debt date is missing.\nthe program got the line\n(Please add the debt date in the file)\n", *countLines);
-			strcpy(temp->Date, "Missing");
-		}
-		else
-		{
-			if (strstr(token, " ") || strstr(token, "\t"))
-			{
-				printf("\n(Error in line %d) --> Irrelevant words at the line end.\nthe program didn't get the line.\n(Please delete these words)\n\n", *countLines);
-				freeOneDebtor(temp);
-				continue;
-			}
-			strcpy(date, token);
-			if(!checkDateValidation(token))
-			{
-				printf("\n(Warning Invalid Date in line % d) -- > The Date should be in this format  _ _/_ _/_ _ _ _, and with days from 01 to 12 and month from 01 to 31.\nthe program got the line(Not the Date).\n(Please correct the date in the file\n", *countLines);
-				strcpy(temp->Date, "Invalid");
-			}
-			else
-				strcpy(temp->Date, date);
-		}
+			if (!handleExistingField(temp, column, &i, countLines))
+				goto getNewLine;
+			delim = strchr(delim, ',');
+			delim++;
+			column = strtok(NULL,",");
+			i++;
+		}while (column);
 		//---------------------------------------------------
 		/*Now we linking the new Detor to the link list*/
 		//---------------------------------------------------
 		addNodeFileToList(head, temp, countLines);
+		i = 0;
 	}
 }
 
@@ -241,7 +254,7 @@ void addNodeFileToList(Debtor** head, Debtor* node, int* lineNumber)
 			{//so we update the TotalSum.
 			//and update firstDetsDate to the oldest date.
 			//as well we free all the temp inculding all is dynamic fields
-				strcpy(current->TelphonNumber, node->TelphonNumber);
+				strcpy(current->PhoneNumber, node->PhoneNumber);
 				current->Debt += node->Debt;
 				/*If in one user line ther's a missinig date
 				so we update his node with missing
@@ -256,7 +269,7 @@ void addNodeFileToList(Debtor** head, Debtor* node, int* lineNumber)
 				else if (!strcmp(node->Date, "Invalid") && strcmp(current->Date, "Missing"))
 					strcpy(current->Date, "Invalid");
 				/*In this case node->FirstDebtsDate = valid date. So we check if current->FirstDebtsDate = valid as well because otherwise it's not posible to check the earlier date*/
-				else if(strcmp(current->Date, "Missing") && strcmp(current->Date, "Invalid"))
+				else if (strcmp(current->Date, "Missing") && strcmp(current->Date, "Invalid"))
 				{
 					if (checkEarlierDate(node->Date, current->Date) == -1)
 						strcpy(current->Date, node->Date);
@@ -277,12 +290,12 @@ void buildNodeQuery(Debtor** headQuery, Debtor** tailQuery, Debtor* current)
 	{
 		Error_Msg("Memmory allocation failed!!. (Try closing other programs that are currently running.\nIf you are still having a problem try restarting your computer.)\n");
 	}
-	temp->FirstName = (char*)malloc(strlen(current->FirstName)+1);
+	temp->FirstName = (char*)malloc(strlen(current->FirstName) + 1);
 	strcpy(temp->FirstName, current->FirstName);
 	temp->LastName = (char*)malloc(strlen(current->LastName) + 1);
 	strcpy(temp->LastName, current->LastName);
 	strcpy(temp->ID, current->ID);
-	strcpy(temp->TelphonNumber, current->TelphonNumber);
+	strcpy(temp->PhoneNumber, current->PhoneNumber);
 	temp->Debt = current->Debt;
 	strcpy(temp->Date, current->Date);
 	addNodeQueryToList(headQuery, tailQuery, temp);
@@ -402,17 +415,17 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 			token = strtok(NULL, " \t,=");
 			if (*token != '0')
 			{
-				printf("\Warning, The phone number should start with digit \"0\"\n");
-				strcpy(temp->TelphonNumber, "Invalid");
+				printf("\nWarning, The phone number should start with digit \"0\"\n");
+				strcpy(temp->PhoneNumber, "Invalid");
 			}
 			else if (!checkSizeAndDigits(token, 10))
 			{
 				printf("\Warning, The phone number should be exactly 9 digits\n");
-				strcpy(temp->TelphonNumber, "Invalid");
+				strcpy(temp->PhoneNumber, "Invalid");
 			}
 			else
 			{
-				strcpy(temp->TelphonNumber, token);
+				strcpy(temp->PhoneNumber, token);
 			}
 		}
 		/*for the amountDebt*/
@@ -475,9 +488,9 @@ void buildNodeUser(FILE* fptr, Debtor** head, int* countLines)
 		strcpy(temp->LastName, "Missing");
 		printf("\n*Note the last name is missing\n");
 	}
-	if (temp->TelphonNumber[0] == 0)
+	if (temp->PhoneNumber[0] == 0)
 	{
-		strcpy(temp->TelphonNumber, "Missing");
+		strcpy(temp->PhoneNumber, "Missing");
 		printf("\n*Note the phone number is missing\n");
 
 	}
@@ -505,7 +518,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 		  2)We add the valid line to the file
 		  3)Notify user that his line added to the file successfully (in line x)*/
 		(*countLines)++;
-		fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->TelphonNumber, node->Debt, node->Date);
+		fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->PhoneNumber, node->Debt, node->Date);
 		printf("\n\nYour set line added to the file successfully (in line %d)", *countLines);
 	}
 	else//There are alredy Detors in the linked list
@@ -550,7 +563,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 			3)Notify user that his line added to the file successfully (in line x)*/
 
 			(*countLines)++;
-			fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->TelphonNumber, node->Debt, node->Date);
+			fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->PhoneNumber, node->Debt, node->Date);
 			printf("\n\nYour set line added to the file successfully (in line %d)", *countLines);
 		}
 		else//This Detor is alredy in the linked list
@@ -570,12 +583,12 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 			   2)We add the valid line to the file
 			   3)Notify user that his line added to the file successfully (in line x)*/
 				(*countLines)++;
-				fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->TelphonNumber, node->Debt, node->Date);
+				fprintf(fptr, "\n%s,%s,%s,%s,%.2f,%s", node->FirstName, node->LastName, node->ID, node->PhoneNumber, node->Debt, node->Date);
 				printf("\n\nYour set line added to the file successfully (in line %d)", *countLines);
 				//then we update the TotalSum for our list.
 				//and update firstDetsDate to the oldest date for our list.
 				//as well we free all the temp inculding all is dynamic fields
-				strcpy(current->TelphonNumber, node->TelphonNumber);
+				strcpy(current->PhoneNumber, node->PhoneNumber);
 				current->Debt += node->Debt;
 				/*The function olderDate return the int who's date is older
 				then if temp->FirstDebtsDate is older date we copy him

@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="buildDeleteFuncs.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="Source.c" />
     <ClCompile Include="userFuncs.c" />
     <ClCompile Include="utilities.c" />
     <ClCompile Include="validations.c" />

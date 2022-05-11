@@ -1,4 +1,23 @@
 
+
+/**/
+int handleMissingField(Debtor*, int*, int*);
+
+/**/
+int handleExistingField(Debtor*, char*, int*, int*);
+
+/**/
+void checkAndSetFirstLastNameExistField(int, char**, char*, int*);
+
+/**/
+void checkAndSetPhoneNumberExistField(char*, char*, int*);
+
+/**/
+int checkAndSetDebtExistField(float*, char*, int*);
+
+/**/
+int checkAndSetDateExistField(char*, char*, int*);
+
 /*This function gets the pointer to the file and
 the pointer to the linked list and the number lines
 of the file(which is zero at the begining)
@@ -51,7 +70,7 @@ i.e. in descending order and then we will have to run
 a sorting function on the list. Because we get the new nodes in ascending
 order. So if we insert from the tail it will be saved in ascending order
 and we won't have to later sort the query list)*/
-void addNodeQueryToList(Debtor** headQuery, Debtor** tailQuery, Debtor* node);
+void addNodeQueryToList(Debtor**, Debtor**, Debtor*);
 
 /*In fact this function is very similar to the function buildNodeFile
 it accepts the line entered by the user and does validations checks
