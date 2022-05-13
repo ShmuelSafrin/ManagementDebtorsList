@@ -25,7 +25,7 @@ int checkAndSetIdExistField(char* debtorField, char* token, int* lineNumber)
 {
 	if (!checkSizeAndDigits(token, 9))
 	{
-		printf("\n(Error in line %d) --> The Id should be exactly 9 digits\n.The line was not accepted in the program.\n", *lineNumber);
+		printf("\n(Error in line %d) --> The Id should be exactly 9 digits.\nThe line was not accepted in the program.\n", *lineNumber);
 		return 0;
 	}
 	strcpy(debtorField, token);
@@ -240,15 +240,28 @@ void addNodeFileToList(Debtor** head, Debtor* node, int* lineNumber)
 		}
 		else//This Detor is alredy in the linked list
 		{
-			//checks matching between the names of an exsist DetorList with the same Id. 
-			if (strcmp(node->FirstName, current->FirstName) || strcmp(node->LastName, current->LastName))
+			//checks matching between the names of an exsist DetorList with the same Id.
+			/*If node->FirstName != Missing and current->FirstName = Missing*/
+			if ((strcmp(node->FirstName, "Missing")) && !(strcmp(current->FirstName, "Missing")))
 			{
-				if (strcmp(node->FirstName, current->FirstName))//if not 0 means they are not equal
-					printf("\n(Error in line %d) --> The first name does not match the name that is already exists in the file with the same ID.\n", *lineNumber);
-				if (strcmp(node->LastName, current->LastName))
-					printf("\n(Error in line %d) --> The last name does not match the name that is already exists in the file with the same ID.\n", *lineNumber);
-				printf("The program didn't get this line. (Please correct the names in the file).\n");
-				freeOneDebtor(node);
+				strcpy(current->FirstName, node->FirstName);
+			}
+			/*If node->FirstName != Missing, and current->FirstName != Missing, and their names are diffrent*/
+			else if (strcmp(node->FirstName, "Missing") && strcmp(current->FirstName, "Missing") && strcmp(node->FirstName, current->FirstName))
+			{
+				printf("\nError, The first name does not match the name that is already exists in the file with the same ID.\n");
+				goto free;
+			}
+
+			if ((strcmp(node->LastName, "Missing")) && !(strcmp(current->LastName, "Missing")))
+			{
+				strcpy(current->LastName, node->LastName);
+			}
+			/*If node->FirstName != Missing, and current->FirstName != Missing, and their names are diffrent*/
+			else if (strcmp(node->LastName, "Missing") && strcmp(current->LastName, "Missing") && strcmp(node->LastName, current->LastName))
+			{
+				printf("\nError, The last name does not match the name that is already exists in the file with the same ID.\n");
+				goto free;
 			}
 			else//The names are matchinig.
 			{//so we update the TotalSum.
@@ -274,6 +287,7 @@ void addNodeFileToList(Debtor** head, Debtor* node, int* lineNumber)
 					if (checkEarlierDate(node->Date, current->Date) == -1)
 						strcpy(current->Date, node->Date);
 				}
+				free:
 				freeOneDebtor(node);
 			}
 		}
@@ -568,14 +582,28 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 		}
 		else//This Detor is alredy in the linked list
 		{
-			//checks matching between the names of an exsist DetorList with the same Id. 
-			if (strcmp(node->FirstName, current->FirstName) || strcmp(node->LastName, current->LastName))
+			//checks matching between the names of an exsist DetorList with the same Id.
+
+			/*If node->FirstName != Missing and current->FirstName = Missing*/
+			if ((strcmp(node->FirstName, "Missing")) && !(strcmp(current->FirstName, "Missing")))
 			{
-				if (strcmp(node->FirstName, current->FirstName))//if not 0 means they are not equal
-					printf("\nError, The first name does not match the name that is already exists in the file with the same ID.\n");
-				if (strcmp(node->LastName, current->LastName))
-					printf("\nError, The last name does not match the name that is already exists in the file with the same ID.\n");
-				printf("\nThe line was not added to the file.\n");
+				strcpy(current->FirstName, node->FirstName);
+			}
+			/*If node->FirstName != Missing, and current->FirstName != Missing, and their names are diffrent*/
+			else if(strcmp(node->FirstName, "Missing") && strcmp(current->FirstName, "Missing") && strcmp(node->FirstName, current->FirstName))
+			{
+				printf("\nError, The first name does not match the name that is already exists in the file with the same ID.\n");
+				goto free;
+			}
+
+			if ((strcmp(node->LastName, "Missing")) && !(strcmp(current->LastName, "Missing")))
+			{
+				strcpy(current->LastName, node->LastName);
+			}
+			/*If node->FirstName != Missing, and current->FirstName != Missing, and their names are diffrent*/
+			else if (strcmp(node->LastName, "Missing") && strcmp(current->LastName, "Missing") && strcmp(node->LastName, current->LastName))
+			{
+				printf("\nError, The last name does not match the name that is already exists in the file with the same ID.\n");
 				goto free;
 			}
 			else//The names are matchinig.
@@ -603,7 +631,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 					if(checkEarlierDate(node->Date, current->Date) == -1)
 						strcpy(current->Date, node->Date);
 				}
-				/*Now we search the place for current if needed*/
+				/*Now we search the place for current to link it in the appropriate order*/
 				if (*head == current)//i.e head is alredy pointinig on the node(because it Total Debt was the smallest debt)
 				{
 					prev = (*head)->next;
@@ -633,7 +661,7 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 					// this while is also for the else ahead
 					while (prev->next != current)
 						prev = prev->next;
-					if (prev->Debt > current->Debt)//primery case
+					if (prev->Debt > current->Debt)//primary case
 					{
 						while (temp1->Debt < current->Debt && temp1->next != prev)
 							temp1 = temp1->next;
@@ -668,7 +696,8 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 								after->next = current;
 								current->next = NULL;
 							}
-							else if (after->next != NULL)
+							//after->next != NULL
+							else
 							{
 								temp1 = after->next;
 								while (current->Debt > temp1->Debt && temp1->next != NULL)
@@ -681,7 +710,8 @@ void addNodeUserToList(FILE* fptr, Debtor** head, Debtor* node, int* countLines)
 								}
 								else
 								{
-									temp2->next = temp1;
+									while (temp2->next != temp1)
+										temp2 = temp2->next;
 									prev->next = after;
 									temp2->next = current;
 									current->next = temp1;
