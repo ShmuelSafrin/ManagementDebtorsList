@@ -209,7 +209,7 @@ getNewLine:
 			i++;
 		}while (column);
 		//---------------------------------------------------
-		/*Now we linking the new Detor to the link list*/
+		/*Now we linking the new Debtor to the link list*/
 		//---------------------------------------------------
 		addNodeFileToList(head, temp, countLines);
 		i = 0;

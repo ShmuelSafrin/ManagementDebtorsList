@@ -4,9 +4,15 @@ char FileName[] = "DebtorsList.csv";
 
 int main()
 {
+	time_t seconds;
+	seconds = time(NULL);
+	struct tm* ptr;
+	ptr = localtime(&seconds);
+	printf("Local date & hour: %s", asctime(ptr));
+	printf("\"Welcome to our program that summarizes all the debts of your debtors!\"\n");
+
 	Debtor* head = NULL;
 	FILE* file_ptr;
-
 	/*If we encountered in error or warninig to notify user.
 	so the notification will included in which line it is*/
 	int countLines = 0;
