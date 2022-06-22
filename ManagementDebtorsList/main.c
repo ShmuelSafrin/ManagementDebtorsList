@@ -4,11 +4,9 @@ char FileName[] = "DebtorsList.csv";
 
 int main()
 {
-	time_t seconds;
-	seconds = time(NULL);
-	struct tm* ptr;
-	ptr = localtime(&seconds);
-	printf("Local date & hour: %s", asctime(ptr));
+	time_t curtime;
+	time(&curtime);
+	printf("Local date & hour: %s", ctime(&curtime));
 	printf("\"Welcome to our program that summarizes all the debts of your debtors!\"\n");
 
 	Debtor* head = NULL;
